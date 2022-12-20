@@ -29,6 +29,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/adapter-static": "^1.0.0",
 		"sass": "^1.57.0",
 		"svelte-icons": "^2.1.0",
 		"svelte-preprocess": "^5.0.0"
