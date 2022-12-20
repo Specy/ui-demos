@@ -1,11 +1,14 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, onMount } from "svelte";
 	import { fade, fly } from "svelte/transition";
-
+    let el:HTMLInputElement
 
     export let price: number | undefined
     export let basePrice: number | undefined
     const dispatcher = createEventDispatcher<{setPrice: number, cancel: void}>()
+    onMount(() => {
+        el.focus()
+    })
 </script>
 
 
@@ -13,12 +16,21 @@
     in:fly={{y: -20}}
     out:fly={{y: -20}}
 >
-    <div class="content">
+    <form class="content"
+        on:submit={(e) => {
+            e.preventDefault()
+            if(!(basePrice === undefined ? price <= 0 : false)){
+                dispatcher("setPrice", basePrice ?? price ?? 0)
+            }
+        }}
+    >
         What's the price?
         <input 
+            type="number"
             placeholder={basePrice === undefined ? "New item" : basePrice.toString()}
             bind:value={price}
             class="price-input"
+            bind:this={el}
         />
         <div class="row">
             <button
@@ -37,7 +49,7 @@
                 Ok
             </button>
         </div>
-    </div>
+    </form>
 </div>
 
 
@@ -71,7 +83,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        padding-top: 20vh;
     }
     .price-input{
         height: 2.5rem;
@@ -88,7 +100,6 @@
         border-radius: 1rem;
         background-color:#d2d1d1;
         box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-
         max-width: 30rem;
     }
 </style>

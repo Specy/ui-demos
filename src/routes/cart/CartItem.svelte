@@ -1,6 +1,7 @@
 <script lang="ts">
     import PriceInput from "./PriceInput.svelte";
     import { cart, Status, type CartItem } from "./store";
+    import FaArrowLeft from 'svelte-icons/fa/FaArrowLeft.svelte'
     export let item: CartItem;
     let x = 0;
     let max = 100;
@@ -35,7 +36,7 @@
 <div class="cart-item"
     class:checkedOut={item.status === Status.Checked}
     on:pointerdown={(e) => {
-        max = e.currentTarget.clientWidth / 2;
+        max = e.currentTarget.clientWidth / 3;
         e.preventDefault();
         isDragging = true;
     }}
@@ -54,6 +55,9 @@
     >
         <div class="name" >
             {item.name}
+        </div>
+        <div class="icon">
+            <FaArrowLeft />
         </div>
     </div>
     <div
@@ -75,11 +79,13 @@
     .draggable{
         position: absolute;
         transition: all 0.2s ease-in-out;
+        justify-content: space-between;
         display: flex;
         align-items: center;
         padding: 0.8rem 2rem;    
         background-color: #d4d4d4;
         touch-action: none;
+        padding-right: 1rem;
         width: 100%;
         height: 100%;
         z-index: 10;
@@ -90,7 +96,11 @@
             transition: none;
         }
     }
-
+    .icon{
+        width: 1rem;
+        height: 1rem;
+        color: #666;
+    }
     .cart-item{
         border: solid 0.2rem transparent;
         display: flex;
