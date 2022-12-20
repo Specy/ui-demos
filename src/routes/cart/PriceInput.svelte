@@ -10,7 +10,8 @@
 
 
 <div class="overlay"
-    in:fly={{y: -10}}
+    in:fly={{y: -20}}
+    out:fly={{y: -20}}
 >
     <div class="content">
         What's the price?
@@ -31,7 +32,7 @@
                 on:click={() => dispatcher("setPrice", basePrice ?? price ?? 0)}
                 disabled={basePrice === undefined ? price <= 0 : false}
                 class="button"
-                style="background-color: teal;"
+                style="background-color: #159393; font-weight: bold; color: white;"
             >
                 Ok
             </button>
@@ -53,7 +54,11 @@
         flex: 1;
         max-width: 7rem;
         padding: 0.6rem 1rem;
+        
         border-radius: 0.4rem;
+        &:disabled{
+            opacity: 0.8;
+        }
     }
     .overlay{
         position: absolute;
@@ -72,7 +77,7 @@
         height: 2.5rem;
         padding: 0.4rem 1rem;
         border-radius: 0.3rem;
-        background-color: red;
+        border: solid 2px #666;
     }
     .content{
         display: flex;
@@ -81,7 +86,9 @@
         width: 90%;
         padding: 1rem;
         border-radius: 1rem;
-        background-color: #666;
+        background-color:#d2d1d1;
+        box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+
         max-width: 30rem;
     }
 </style>

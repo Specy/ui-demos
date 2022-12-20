@@ -15,7 +15,7 @@ export type CartItem = {
     estimatePrice: number | undefined;
     status: Status;
 }
-function createItem(name: string, estimatePrice: number, quantity: number): CartItem{
+function createItem(name: string, estimatePrice: number | undefined, quantity: number): CartItem{
     return {
         id: Math.random(),
         name,
@@ -28,10 +28,10 @@ function createItem(name: string, estimatePrice: number, quantity: number): Cart
 
 function createCart(){
     const { subscribe, set, update } = writable<CartItem[]>([
-        createItem("Mela", 0.5, 3),
+        createItem("Mela", undefined, 3),
         createItem("1Kg Penne integrali", 2, 1),
         createItem("Barretta di cioccolato agli arachidi", 1, 2),
-        createItem("1L latte", 1.5, 1),
+        createItem("1L latte", undefined, 1),
         createItem("Candeggina", 4, 1),
         createItem("Sacco spazzatura", 0.5, 2),
     ]);
@@ -67,7 +67,7 @@ function createCart(){
             set(JSON.parse(items));
         }
     }
-    if(browser) load();
+    //if(browser) load();
     return {
         subscribe,
         checkOut,

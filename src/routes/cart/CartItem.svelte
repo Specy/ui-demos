@@ -1,6 +1,6 @@
 <script lang="ts">
     import PriceInput from "./PriceInput.svelte";
-import { cart, Status, type CartItem } from "./store";
+    import { cart, Status, type CartItem } from "./store";
     export let item: CartItem;
     let x = 0;
     let max = 100;
@@ -9,12 +9,11 @@ import { cart, Status, type CartItem } from "./store";
     function onLeave(e: any){
         e.preventDefault();
         isDragging = false;
-        if(x >= ((max - 10)* -1) && !askingPrice){
+        if(-x >= (max - 10) && !askingPrice){
             askingPrice = true
         }
         x = 0;
     }
-
 
     function clamp(x: number, min: number, max: number) {
         return Math.min(Math.max(x, min), max);
@@ -28,6 +27,7 @@ import { cart, Status, type CartItem } from "./store";
         on:cancel={() => askingPrice = false}
         on:setPrice={(e) => {
             cart.checkOut(item.id, e.detail)
+            askingPrice = false
         }}
     />
 {/if}
@@ -91,16 +91,17 @@ import { cart, Status, type CartItem } from "./store";
         }
     }
 
-    .checkedOut{
-        border-color: green;
-    }
     .cart-item{
+        border: solid 0.2rem transparent;
         display: flex;
         position: relative;
         height: 4rem;
         overflow: hidden;
         width: 100%;
         border-radius: 0.8rem;
+    }
+    .checkedOut{
+        border-color: green;
     }
     .bg{
         position: absolute;
