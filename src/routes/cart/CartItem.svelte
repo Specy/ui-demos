@@ -1,38 +1,51 @@
 <script lang="ts">
-    import type { CartItem } from "./store";
+    import PriceInput from "./PriceInput.svelte";
+import { cart, Status, type CartItem } from "./store";
     export let item: CartItem;
     let x = 0;
     let max = 100;
     let isDragging = false;
+    let askingPrice = false;
+    function onLeave(e: any){
+        e.preventDefault();
+        isDragging = false;
+        if(x >= ((max - 10)* -1) && !askingPrice){
+            askingPrice = true
+        }
+        x = 0;
+    }
+
 
     function clamp(x: number, min: number, max: number) {
         return Math.min(Math.max(x, min), max);
     }
 </script>
 
-
+{#if askingPrice}
+    <PriceInput 
+        bind:price={item.price}
+        basePrice={item.estimatePrice}
+        on:cancel={() => askingPrice = false}
+        on:setPrice={(e) => {
+            cart.checkOut(item.id, e.detail)
+        }}
+    />
+{/if}
 
 <div class="cart-item"
-on:pointerdown={(e) => {
-    max = e.currentTarget.clientWidth / 1.5;
-    e.preventDefault();
-    isDragging = true;
-}}
-on:pointerleave={(e) => {
-    e.preventDefault();
-    isDragging = false;
-    x = 0;
-}}
-on:pointerup={(e) => {
-    isDragging = false;
-    x = 0;
-}}
-on:pointermove={(e) => {
-    console.log(isDragging)
-    if (!isDragging) return;
-    e.preventDefault();
-    x += e.movementX;
-}}
+    class:checkedOut={item.status === Status.Checked}
+    on:pointerdown={(e) => {
+        max = e.currentTarget.clientWidth / 2;
+        e.preventDefault();
+        isDragging = true;
+    }}
+    on:pointerleave={onLeave}
+    on:pointerup={onLeave}
+    on:pointermove={(e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        x = clamp(x + e.movementX, -max, 0)
+    }}
 >
     <div 
         class="draggable"
@@ -78,6 +91,9 @@ on:pointermove={(e) => {
         }
     }
 
+    .checkedOut{
+        border-color: green;
+    }
     .cart-item{
         display: flex;
         position: relative;

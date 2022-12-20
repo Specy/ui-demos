@@ -11,8 +11,8 @@ export type CartItem = {
     id: number;
     name: string;
     quantity: number;
-    price: number | null;
-    estimatePrice: number;
+    price: number | undefined;
+    estimatePrice: number | undefined;
     status: Status;
 }
 function createItem(name: string, estimatePrice: number, quantity: number): CartItem{
